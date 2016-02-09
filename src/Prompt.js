@@ -4,6 +4,7 @@ const {
   Platform,
   Text,
   TextInput,
+  ScrollView,
   TouchableWithoutFeedback,
   View
 } = React;
@@ -32,6 +33,7 @@ const Prompt = React.createClass({
     cancelButtonTextStyle: React.PropTypes.object,
     inputStyle: React.PropTypes.object
   },
+
   getDefaultProps() {
     return  {
       visible: false,
@@ -75,6 +77,19 @@ const Prompt = React.createClass({
     if (nextProps.visible !== this.props.visible) {
       this._showOrCloseModal(nextProps.visible);
     }
+  },
+  _inputFocused(refName,offset) {
+
+    setTimeout(() => {
+
+      let scrollResponder = this.refs.scrollView.getScrollResponder();
+      scrollResponder.scrollResponderScrollNativeHandleToKeyboard(
+        React.findNodeHandle(this.refs[refName]),
+        offset, //additionalOffset
+        true
+      );
+
+    }, 50);
   },
   _showOrCloseModal(visible) {
     if (visible) {
@@ -121,7 +136,7 @@ const Prompt = React.createClass({
       inputStyle
     } = this.props;
     return (
-      <View style={styles.dialog} key="prompt">
+      <ScrollView ref='scrollView' contentContainerStyle={styles.dialog} key="prompt">
         <View style={styles.dialogOverlay}/>
         <View style={[styles.dialogContent, { borderColor }, promptStyle]}>
           <View style={[styles.dialogTitle, { borderColor }]}>
@@ -131,6 +146,11 @@ const Prompt = React.createClass({
           </View>
           <View style={styles.dialogBody}>
             <TextInput
+
+              autoCapitalize='none' 
+              ref='inputText' 
+              onFocus={this._inputFocused.bind(this, 'inputText',100) }
+              onBlur={this._inputFocused.bind(this, 'inputText',0) }
               style={[styles.dialogInput, inputStyle]}
               defaultValue={defaultValue}
               onChangeText={this._onChangeText}
@@ -155,7 +175,7 @@ const Prompt = React.createClass({
             </TouchableWithoutFeedback>
           </View>
         </View>
-      </View>
+      </ScrollView>
     );
   },
   render() {
