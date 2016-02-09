@@ -6,10 +6,10 @@ module.exports = StyleSheet.create({
     alignItems: 'center'
   },
   dialogOverlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     position: 'absolute',
-    top: 0,
-    bottom: 0,
+    top: -200,
+    bottom: -200,
     left: 0,
     right: 0
   },
